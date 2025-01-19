@@ -1,52 +1,49 @@
 import java.util.Scanner;
-public class SumCalculator {
+
+public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Введите x: ");
+
+        System.out.print("Введите значение x: ");
         double x = scanner.nextDouble();
-        System.out.print("Введите количество слагаемых: ");
+
+        System.out.print("Введите количество слагаемых n: ");
         int n = scanner.nextInt();
-        double e = 2.7;
-        if (x > Double.MAX_VALUE || x < -Double.MAX_VALUE) {
-            System.out.println("Значение x за пределами допустимого интервала");
-            return;
-        }
-        double sumN = calculateSumN(x, n);
-        System.out.println("Сумма " + n + " слагаемых: " + sumN);
-        double sumGreaterE = calculateSumGreater(x, n, e);
-        System.out.println("Сумма слагаемых > e: " + sumGreaterE);
-        double sumGreaterE_10 = calculateSumGreater(x, n, e / 10);
-        System.out.println("Сумма слагаемых > e/10: " + sumGreaterE_10);
-        double mathFunctionValue = Math.exp(-Math.pow(x, 2));
-        System.out.println("Значение функции Math.exp(-x^2): " + mathFunctionValue);
-        scanner.close();
-    }
-    public static long factorial(int n) {
-        if (n == 0) {
-            return 1;
-        }
-        long result = 1;
-        for (int i = 1; i <= n; i++) {
-            result *= i;
-        }
-        return result;
-    }
-    public static double calculateSumN(double x, int n) {
-        double sum = 0;
-        for (int i = 0; i < n; i++) {
-            double term = Math.pow(-1, i) * Math.pow(x, 2 * i) / factorial(i);
-            sum += term;
-        }
-        return sum;
-    }
-    public static double calculateSumGreater(double x, int n, double threshold) {
-        double sum = 0;
-        for (int i = 0; i < n; i++) {
-            double term = Math.pow(-1, i) * Math.pow(x, 2 * i) / factorial(i);
-            if (Math.abs(term) > threshold) {
-                sum += term;
+
+        System.out.print("Введите значение e: ");
+        double e = scanner.nextDouble();
+
+        double sum = 0.0;
+        double sumE = 0.0;
+        double sumE10 = 0.0;
+        double an = 1.0;
+        double factorial = 1.0;
+
+        for (int i = 0; i < n || Math.abs(an) > e/10; i++) {
+            if (i > 0) {
+                factorial *= i;
+            }
+
+            int znak = (i % 2 == 0 ? 1 : -1);
+            an = znak * (Math.pow(x, 2 * i) / factorial);
+            if (i < n){
+                sum += an;
+            }
+
+            if (Math.abs(an) > e) {
+                sumE += an;
+            }
+            if (Math.abs(an) > e / 10) {
+                sumE10 += an;
             }
         }
-        return sum;
+
+        double mathExpValue = Math.exp(-Math.pow(x, 2));
+
+        System.out.printf("Сумма %d слагаемых: %.6f%n", n, sum);
+        System.out.printf("Сумма слагаемых, которые по абсолютной величине больше e: %.6f%n", sumE);
+        System.out.printf("Сумма слагаемых, которые по абсолютной величине больше e/10: %.6f%n", sumE10);
+        System.out.printf("Значение функции Math.exp(x): %.12f%n", mathExpValue);
+
     }
 }
